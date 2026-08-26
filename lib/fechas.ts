@@ -71,3 +71,9 @@ export function formatoFechaLarga(d: Date): string {
     day: "numeric",
   });
 }
+
+// Los nombres de día/mes en español van en minúsculas salvo al iniciar una oración
+// o encabezado — a diferencia del inglés, no se capitaliza cada palabra.
+export function conMayusculaInicial(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}

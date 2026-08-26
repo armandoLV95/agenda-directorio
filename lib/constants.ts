@@ -2,7 +2,7 @@
 // `categoria` en la base de datos es texto libre), pensadas para un consultorio
 // dental pero genéricas para cualquier negocio de servicios.
 export const CATEGORIAS_CONTACTO = {
-  PACIENTE: "Paciente / Cliente",
+  PACIENTE: "Paciente",
   PROVEEDOR: "Proveedor",
   LABORATORIO: "Laboratorio",
   ASEGURADORA: "Aseguradora",

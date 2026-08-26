@@ -2,7 +2,7 @@ import Link from "next/link";
 import { requireSession } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { labelEstadoCita, ESTADO_CITA_COLOR } from "@/lib/constants";
-import { toYMD, formatoHora, formatoFechaLarga } from "@/lib/fechas";
+import { toYMD, formatoHora, formatoFechaLarga, conMayusculaInicial } from "@/lib/fechas";
 
 export default async function DashboardPage() {
   await requireSession();
@@ -25,8 +25,8 @@ export default async function DashboardPage() {
     <div className="max-w-3xl mx-auto w-full px-4 py-8 space-y-8">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-semibold text-teal-900 capitalize">
-            {formatoFechaLarga(hoy)}
+          <h1 className="text-2xl font-semibold text-teal-900">
+            {conMayusculaInicial(formatoFechaLarga(hoy))}
           </h1>
           <p className="text-sm text-slate-500">
             {totalContactos} contacto{totalContactos === 1 ? "" : "s"} en el directorio

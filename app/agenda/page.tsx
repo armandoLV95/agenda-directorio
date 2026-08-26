@@ -13,6 +13,7 @@ import {
   esMismoMes,
   nombreDiaCorto,
   formatoFechaLarga,
+  conMayusculaInicial,
 } from "@/lib/fechas";
 
 type Vista = "dia" | "semana" | "mes";
@@ -44,7 +45,7 @@ async function VistaDia({ fecha }: { fecha: Date }) {
 
   return (
     <div className="max-w-2xl mx-auto w-full px-4 py-8 space-y-6">
-      <AgendaHeader vista="dia" fecha={fecha} titulo={formatoFechaLarga(fecha)} />
+      <AgendaHeader vista="dia" fecha={fecha} titulo={conMayusculaInicial(formatoFechaLarga(fecha))} />
       {citas.length === 0 ? (
         <p className="text-sm text-slate-500 rounded-md border border-dashed border-slate-300 p-8 text-center">
           No hay citas este día.

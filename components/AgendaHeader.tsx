@@ -30,7 +30,7 @@ export default function AgendaHeader({
   return (
     <div className="flex items-center justify-between flex-wrap gap-3">
       <div className="flex items-center gap-2">
-        <h1 className="text-xl font-semibold text-teal-900 capitalize whitespace-nowrap">
+        <h1 className="text-xl font-semibold text-teal-900 whitespace-nowrap">
           {titulo}
         </h1>
         <span className="text-slate-400 text-sm">· {nombreMes(fecha)} {fecha.getFullYear()}</span>
