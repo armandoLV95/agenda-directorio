@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Usuario {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  username     String?  @unique
+  name         String?
+  passwordHash String
+  activo       Boolean  @default(true)
+  createdAt    DateTime @default(now())
+}
+
+// Categoría configurable del contacto (paciente, proveedor, laboratorio, etc.).
+// Ver CATEGORIAS_CONTACTO en lib/constants.ts — no se restringe a nivel de base de
+// datos para que cada negocio pueda usar sus propias categorías sin migrar el esquema.
+model Contacto {
+  id        String   @id @default(cuid())
+  nombre    String
+  categoria String   @default("OTRO")
+  telefono  String?
+  telefono2 String?
+  email     String?
+  direccion String?
+  notas     String?
+  createdAt DateTime @default(now())
+
+  citas Cita[]
+}
+
+// Estado posibles: "PROGRAMADA" | "CONFIRMADA" | "COMPLETADA" | "CANCELADA" | "NO_ASISTIO"
+model Cita {
+  id           String    @id @default(cuid())
+  titulo       String
+  contactoId   String?
+  contacto     Contacto? @relation(fields: [contactoId], references: [id])
+  fechaInicio  DateTime
+  fechaFin     DateTime
+  estado       String    @default("PROGRAMADA")
+  notas        String?
+  createdAt    DateTime  @default(now())
+
+  @@index([fechaInicio])
+}
