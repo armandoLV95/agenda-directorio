@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import type { Contacto } from "@prisma/client";
 import type { FormState } from "@/lib/actions/agenda";
+import ContactoSelect from "@/components/ContactoSelect";
 
 export default function CitaForm({
   accion,
@@ -79,18 +80,7 @@ export default function CitaForm({
 
       <div>
         <label className="block text-sm font-medium text-slate-700 mb-1">Contacto (opcional)</label>
-        <select
-          name="contactoId"
-          defaultValue={valoresIniciales?.contactoId ?? ""}
-          className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm bg-white"
-        >
-          <option value="">— Sin asignar —</option>
-          {contactos.map((c) => (
-            <option key={c.id} value={c.id}>
-              {c.nombre}
-            </option>
-          ))}
-        </select>
+        <ContactoSelect contactos={contactos} valorInicial={valoresIniciales?.contactoId} />
       </div>
 
       <div>

@@ -40,6 +40,9 @@ yarn-error.log*
 /prisma/*.db
 /prisma/*.db-journal
 
+# respaldos de la base de produccion (contienen datos reales de pacientes)
+/backups/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
