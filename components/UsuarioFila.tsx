@@ -9,7 +9,7 @@ export default function UsuarioFila({
   usuario,
   esUnoMismo,
 }: {
-  usuario: { id: string; name: string | null; email: string; username: string | null; role: string };
+  usuario: { id: string; name: string | null; email: string | null; username: string | null; role: string };
   esUnoMismo: boolean;
 }) {
   const [cambiandoPassword, setCambiandoPassword] = useState(false);
@@ -20,10 +20,13 @@ export default function UsuarioFila({
     <li className="rounded-md border border-slate-200 bg-white p-4 space-y-2">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <p className="text-sm font-medium text-slate-900">{usuario.name ?? usuario.email}</p>
+          <p className="text-sm font-medium text-slate-900">
+            {usuario.name ?? usuario.username ?? usuario.email}
+          </p>
           <p className="text-xs text-slate-500">
-            {usuario.email}
-            {usuario.username ? ` · usuario: ${usuario.username}` : ""}
+            {usuario.username ? `usuario: ${usuario.username}` : ""}
+            {usuario.username && usuario.email ? " · " : ""}
+            {usuario.email ?? ""}
           </p>
         </div>
 
@@ -69,7 +72,7 @@ export default function UsuarioFila({
               }}
             >
               <ConfirmarBoton
-                mensaje={`¿Eliminar al usuario ${usuario.name ?? usuario.email}? Sus citas quedarán sin autor asignado.`}
+                mensaje={`¿Eliminar al usuario ${usuario.name ?? usuario.username ?? usuario.email}? Sus citas quedarán sin autor asignado.`}
                 className="text-xs text-red-600 hover:text-red-800 underline"
               >
                 Eliminar

@@ -11,17 +11,19 @@ export type FormState = { error: string } | null;
 export async function crearUsuario(_prevState: FormState, formData: FormData): Promise<FormState> {
   await requireAdmin();
 
-  const email = String(formData.get("email") ?? "").trim().toLowerCase();
-  const username = String(formData.get("username") ?? "").trim() || null;
+  const emailIngresado = String(formData.get("email") ?? "").trim().toLowerCase();
+  const email = emailIngresado || null;
+  const username = String(formData.get("username") ?? "").trim();
   const name = String(formData.get("name") ?? "").trim() || null;
   const password = String(formData.get("password") ?? "");
   const role = String(formData.get("role") ?? "") === ROLES.ADMIN ? ROLES.ADMIN : ROLES.ASISTENTE;
 
-  if (!email || !email.includes("@")) return { error: "Ingresa un correo válido." };
+  if (!username) return { error: "El usuario para entrar es obligatorio." };
+  if (email && !email.includes("@")) return { error: "Ingresa un correo válido." };
   if (password.length < 8) return { error: "La contraseña debe tener al menos 8 caracteres." };
 
   const existente = await prisma.usuario.findFirst({
-    where: { OR: [{ email }, ...(username ? [{ username }] : [])] },
+    where: { OR: [{ username }, ...(email ? [{ email }] : [])] },
   });
   if (existente) return { error: "Ya existe una cuenta con ese correo o usuario." };
 

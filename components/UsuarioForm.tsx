@@ -25,14 +25,14 @@ export default function UsuarioForm() {
         <input
           name="email"
           type="email"
-          required
-          placeholder="Correo"
+          placeholder="Correo (opcional)"
           className="rounded-md border border-slate-300 px-3 py-2 text-sm"
         />
         <input
           name="username"
           type="text"
-          placeholder="Usuario para entrar (opcional)"
+          required
+          placeholder="Usuario para entrar"
           className="rounded-md border border-slate-300 px-3 py-2 text-sm"
         />
         <input

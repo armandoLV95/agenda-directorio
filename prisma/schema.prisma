@@ -10,7 +10,8 @@ datasource db {
 // Roles posibles: "ADMIN" | "ASISTENTE". Solo ADMIN puede gestionar usuarios.
 model Usuario {
   id           String   @id @default(cuid())
-  email        String   @unique
+  // Opcional: el usuario puede entrar solo con "username" si no se captura correo.
+  email        String?  @unique
   username     String?  @unique
   name         String?
   passwordHash String
