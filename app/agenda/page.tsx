@@ -76,7 +76,7 @@ async function VistaSemana({ fecha }: { fecha: Date }) {
           const citasDia = citas.filter((c) => esMismoDia(c.fechaInicio, dia));
           const esHoy = esMismoDia(dia, hoy);
           return (
-            <div key={toYMD(dia)} className="space-y-2">
+            <div key={toYMD(dia)} className="min-w-0 space-y-2">
               <Link
                 href={`/agenda?vista=dia&fecha=${toYMD(dia)}`}
                 className={`block text-center rounded-md py-1.5 text-sm font-medium ${
