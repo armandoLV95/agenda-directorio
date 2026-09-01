@@ -30,9 +30,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Image
             src="/logo-icon.png"
             alt=""
-            width={520}
-            height={683}
-            className="w-[280px] sm:w-[380px] md:w-[480px] h-auto mix-blend-multiply opacity-20"
+            width={175}
+            height={226}
+            className="w-[280px] sm:w-[380px] md:w-[480px] h-auto opacity-20"
           />
         </div>
         <Nav />

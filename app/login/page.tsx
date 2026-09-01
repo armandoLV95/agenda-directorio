@@ -9,8 +9,8 @@ export default function LoginPage() {
           <Image
             src="/logo-cpid.png"
             alt="CPID - Centro de Periodoncia e Implantes Dentales"
-            width={250}
-            height={105}
+            width={546}
+            height={226}
             className="h-20 w-auto mx-auto"
             priority
           />
