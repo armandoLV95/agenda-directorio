@@ -31,7 +31,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!usuario || !usuario.activo) return null;
         const valido = await bcrypt.compare(password, usuario.passwordHash);
         if (!valido) return null;
-        return { id: usuario.id, email: usuario.email, name: usuario.name };
+        return { id: usuario.id, email: usuario.email, name: usuario.name, role: usuario.role };
       },
     }),
   ],
@@ -39,12 +39,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, user }) {
       if (user?.id) {
         token.usuarioId = user.id;
+        token.role = (user as { role?: string }).role;
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.usuarioId as string;
+        session.user.role = token.role as string;
       }
       return session;
     },

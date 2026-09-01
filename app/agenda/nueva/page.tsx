@@ -3,16 +3,17 @@ import { requireSession } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { crearCita } from "@/lib/actions/agenda";
 import CitaForm from "@/components/CitaForm";
-import { toYMD } from "@/lib/fechas";
+import { toYMD, sumarMinutosHM } from "@/lib/fechas";
 
 export default async function NuevaCitaPage({
   searchParams,
 }: {
-  searchParams: Promise<{ fecha?: string; contactoId?: string }>;
+  searchParams: Promise<{ fecha?: string; contactoId?: string; hora?: string }>;
 }) {
   await requireSession();
   const params = await searchParams;
   const contactos = await prisma.contacto.findMany({ orderBy: { nombre: "asc" } });
+  const horaValida = params.hora && /^\d{2}:\d{2}$/.test(params.hora) ? params.hora : undefined;
 
   return (
     <div className="max-w-lg mx-auto w-full px-4 py-8 space-y-6">
@@ -30,6 +31,8 @@ export default async function NuevaCitaPage({
         valoresIniciales={{
           fecha: params.fecha ?? toYMD(new Date()),
           contactoId: params.contactoId,
+          horaInicio: horaValida,
+          horaFin: horaValida ? sumarMinutosHM(horaValida, 30) : undefined,
         }}
       />
     </div>

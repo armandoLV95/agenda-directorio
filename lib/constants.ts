@@ -37,3 +37,13 @@ export const ESTADO_CITA_COLOR: Record<string, string> = {
   CANCELADA: "bg-red-100 text-red-700 border-red-200 line-through",
   NO_ASISTIO: "bg-amber-100 text-amber-800 border-amber-200",
 };
+
+export const ROLES = {
+  ADMIN: "ADMIN",
+  ASISTENTE: "ASISTENTE",
+} as const;
+
+export const ROLES_LABEL: Record<string, string> = {
+  ADMIN: "Administrador",
+  ASISTENTE: "Asistente",
+};

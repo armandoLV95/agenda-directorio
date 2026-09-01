@@ -2,6 +2,7 @@ import Link from "next/link";
 import { requireSession } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import AgendaHeader from "@/components/AgendaHeader";
+import AgendaGridDia from "@/components/AgendaGridDia";
 import CitaItem from "@/components/CitaItem";
 import {
   fromYMD,
@@ -46,17 +47,7 @@ async function VistaDia({ fecha }: { fecha: Date }) {
   return (
     <div className="max-w-2xl mx-auto w-full px-4 py-8 space-y-6">
       <AgendaHeader vista="dia" fecha={fecha} titulo={conMayusculaInicial(formatoFechaLarga(fecha))} />
-      {citas.length === 0 ? (
-        <p className="text-sm text-slate-500 rounded-md border border-dashed border-slate-300 p-8 text-center">
-          No hay citas este día.
-        </p>
-      ) : (
-        <div className="space-y-2">
-          {citas.map((cita) => (
-            <CitaItem key={cita.id} cita={cita} />
-          ))}
-        </div>
-      )}
+      <AgendaGridDia fecha={fecha} citas={citas} />
     </div>
   );
 }

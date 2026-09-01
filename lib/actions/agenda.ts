@@ -36,7 +36,7 @@ function validar(campos: ReturnType<typeof leerCampos>): FormState {
 }
 
 export async function crearCita(_prevState: FormState, formData: FormData): Promise<FormState> {
-  await requireSession();
+  const session = await requireSession();
   const campos = leerCampos(formData);
   const error = validar(campos);
   if (error) return error;
@@ -48,6 +48,8 @@ export async function crearCita(_prevState: FormState, formData: FormData): Prom
       fechaFin: combinarFechaHora(campos.fecha, campos.horaFin),
       contactoId: campos.contactoId,
       notas: campos.notas,
+      creadoPorId: session.user.id,
+      actualizadoPorId: session.user.id,
     },
   });
 
@@ -60,7 +62,7 @@ export async function actualizarCita(
   _prevState: FormState,
   formData: FormData
 ): Promise<FormState> {
-  await requireSession();
+  const session = await requireSession();
   const campos = leerCampos(formData);
   const error = validar(campos);
   if (error) return error;
@@ -73,6 +75,7 @@ export async function actualizarCita(
       fechaFin: combinarFechaHora(campos.fecha, campos.horaFin),
       contactoId: campos.contactoId,
       notas: campos.notas,
+      actualizadoPorId: session.user.id,
     },
   });
 
@@ -81,9 +84,12 @@ export async function actualizarCita(
 }
 
 export async function actualizarEstadoCita(citaId: string, fecha: string, formData: FormData) {
-  await requireSession();
+  const session = await requireSession();
   const estado = String(formData.get("estado") ?? "");
-  await prisma.cita.update({ where: { id: citaId }, data: { estado } });
+  await prisma.cita.update({
+    where: { id: citaId },
+    data: { estado, actualizadoPorId: session.user.id },
+  });
   revalidatePath("/agenda");
   redirect(`/agenda?vista=dia&fecha=${fecha}`);
 }

@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { auth } from "@/lib/auth";
 import CerrarSesionBoton from "@/components/CerrarSesionBoton";
+import { ROLES } from "@/lib/constants";
 
 export default async function Nav() {
   const session = await auth();
@@ -20,6 +21,11 @@ export default async function Nav() {
           <Link href="/directorio" className="hover:text-teal-200">
             Directorio
           </Link>
+          {session.user.role === ROLES.ADMIN && (
+            <Link href="/usuarios" className="hover:text-teal-200">
+              Usuarios
+            </Link>
+          )}
           <span className="text-teal-300">{session.user.name ?? session.user.email}</span>
           <CerrarSesionBoton />
         </nav>

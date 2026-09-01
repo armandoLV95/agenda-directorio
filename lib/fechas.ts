@@ -53,6 +53,18 @@ export function nombreMes(d: Date): string {
   return MESES[d.getMonth()];
 }
 
+export function minutosDelDia(d: Date): number {
+  return d.getHours() * 60 + d.getMinutes();
+}
+
+export function sumarMinutosHM(hm: string, minutos: number): string {
+  const [h, m] = hm.split(":").map(Number);
+  const total = (h * 60 + m + minutos + 24 * 60) % (24 * 60);
+  const hh = Math.floor(total / 60);
+  const mm = total % 60;
+  return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
+}
+
 export function toHM(d: Date): string {
   const h = String(d.getHours()).padStart(2, "0");
   const m = String(d.getMinutes()).padStart(2, "0");

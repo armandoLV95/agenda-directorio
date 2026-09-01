@@ -6,7 +6,7 @@ import { actualizarCita, actualizarEstadoCita, eliminarCita } from "@/lib/action
 import CitaForm from "@/components/CitaForm";
 import ConfirmarBoton from "@/components/ConfirmarBoton";
 import { ESTADOS_CITA } from "@/lib/constants";
-import { toYMD, toHM } from "@/lib/fechas";
+import { toYMD, toHM, formatoFechaLarga, formatoHora } from "@/lib/fechas";
 
 export default async function EditarCitaPage({
   params,
@@ -17,7 +17,10 @@ export default async function EditarCitaPage({
   const { id } = await params;
 
   const [cita, contactos] = await Promise.all([
-    prisma.cita.findUnique({ where: { id } }),
+    prisma.cita.findUnique({
+      where: { id },
+      include: { creadoPor: true, actualizadoPor: true },
+    }),
     prisma.contacto.findMany({ orderBy: { nombre: "asc" } }),
   ]);
   if (!cita) notFound();
@@ -32,6 +35,18 @@ export default async function EditarCitaPage({
           Cancelar
         </Link>
       </div>
+
+      <p className="text-xs text-slate-400">
+        Creada por {cita.creadoPor?.name ?? cita.creadoPor?.email ?? "—"} el{" "}
+        {formatoFechaLarga(cita.createdAt)}, {formatoHora(cita.createdAt)}
+        {cita.actualizadoPor && (
+          <>
+            {" "}
+            · Última modificación por {cita.actualizadoPor.name ?? cita.actualizadoPor.email} el{" "}
+            {formatoFechaLarga(cita.actualizadoEn)}, {formatoHora(cita.actualizadoEn)}
+          </>
+        )}
+      </p>
 
       <div className="flex flex-wrap gap-2">
         {Object.entries(ESTADOS_CITA).map(([valor, label]) => (
