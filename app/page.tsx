@@ -64,8 +64,8 @@ export default async function DashboardPage() {
           <ul className="divide-y divide-slate-200 rounded-md border border-slate-200 bg-white">
             {citasHoy.map((cita) => (
               <li key={cita.id} className="flex items-center gap-3 px-4 py-3">
-                <span className="text-sm font-medium text-slate-700 w-14 shrink-0">
-                  {formatoHora(cita.fechaInicio)}
+                <span className="text-sm font-medium text-slate-700 shrink-0 whitespace-nowrap">
+                  {formatoHora(cita.fechaInicio)}–{formatoHora(cita.fechaFin)}
                 </span>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-slate-900 truncate">{cita.titulo}</p>
