@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/authz";
+import { formatoHora } from "@/lib/fechas";
 
 export type FormState = { error: string } | null;
 
@@ -35,17 +36,41 @@ function validar(campos: ReturnType<typeof leerCampos>): FormState {
   return null;
 }
 
+// Dos citas se encuentran si una empieza antes de que la otra termine y viceversa.
+// Las canceladas no cuentan: liberan su horario para agendar algo mas.
+async function buscarConflicto(fechaInicio: Date, fechaFin: Date, excluirCitaId?: string) {
+  return prisma.cita.findFirst({
+    where: {
+      id: excluirCitaId ? { not: excluirCitaId } : undefined,
+      estado: { not: "CANCELADA" },
+      fechaInicio: { lt: fechaFin },
+      fechaFin: { gt: fechaInicio },
+    },
+  });
+}
+
+function mensajeConflicto(conflicto: { titulo: string; fechaInicio: Date; fechaFin: Date }): FormState {
+  return {
+    error: `Ya hay una cita agendada de ${formatoHora(conflicto.fechaInicio)} a ${formatoHora(conflicto.fechaFin)} (${conflicto.titulo}). Elige otro horario.`,
+  };
+}
+
 export async function crearCita(_prevState: FormState, formData: FormData): Promise<FormState> {
   const session = await requireSession();
   const campos = leerCampos(formData);
   const error = validar(campos);
   if (error) return error;
 
+  const fechaInicio = combinarFechaHora(campos.fecha, campos.horaInicio);
+  const fechaFin = combinarFechaHora(campos.fecha, campos.horaFin);
+  const conflicto = await buscarConflicto(fechaInicio, fechaFin);
+  if (conflicto) return mensajeConflicto(conflicto);
+
   await prisma.cita.create({
     data: {
       titulo: campos.titulo,
-      fechaInicio: combinarFechaHora(campos.fecha, campos.horaInicio),
-      fechaFin: combinarFechaHora(campos.fecha, campos.horaFin),
+      fechaInicio,
+      fechaFin,
       contactoId: campos.contactoId,
       notas: campos.notas,
       creadoPorId: session.user.id,
@@ -67,12 +92,17 @@ export async function actualizarCita(
   const error = validar(campos);
   if (error) return error;
 
+  const fechaInicio = combinarFechaHora(campos.fecha, campos.horaInicio);
+  const fechaFin = combinarFechaHora(campos.fecha, campos.horaFin);
+  const conflicto = await buscarConflicto(fechaInicio, fechaFin, citaId);
+  if (conflicto) return mensajeConflicto(conflicto);
+
   await prisma.cita.update({
     where: { id: citaId },
     data: {
       titulo: campos.titulo,
-      fechaInicio: combinarFechaHora(campos.fecha, campos.horaInicio),
-      fechaFin: combinarFechaHora(campos.fecha, campos.horaFin),
+      fechaInicio,
+      fechaFin,
       contactoId: campos.contactoId,
       notas: campos.notas,
       actualizadoPorId: session.user.id,

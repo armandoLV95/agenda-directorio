@@ -3,7 +3,7 @@ import { requireSession } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import AgendaHeader from "@/components/AgendaHeader";
 import AgendaGridDia from "@/components/AgendaGridDia";
-import CitaItem from "@/components/CitaItem";
+import AgendaGridSemana from "@/components/AgendaGridSemana";
 import {
   fromYMD,
   toYMD,
@@ -12,7 +12,6 @@ import {
   inicioCuadriculaMes,
   esMismoDia,
   esMismoMes,
-  nombreDiaCorto,
   formatoFechaLarga,
   conMayusculaInicial,
 } from "@/lib/fechas";
@@ -62,7 +61,6 @@ async function VistaSemana({ fecha }: { fecha: Date }) {
   });
 
   const dias = Array.from({ length: 7 }, (_, i) => sumarDias(inicio, i));
-  const hoy = new Date();
 
   return (
     <div className="max-w-6xl mx-auto w-full px-4 py-8 space-y-6">
@@ -71,31 +69,7 @@ async function VistaSemana({ fecha }: { fecha: Date }) {
         fecha={fecha}
         titulo={`${dias[0].getDate()} – ${dias[6].getDate()}`}
       />
-      <div className="grid grid-cols-1 sm:grid-cols-7 gap-3">
-        {dias.map((dia) => {
-          const citasDia = citas.filter((c) => esMismoDia(c.fechaInicio, dia));
-          const esHoy = esMismoDia(dia, hoy);
-          return (
-            <div key={toYMD(dia)} className="min-w-0 space-y-2">
-              <Link
-                href={`/agenda?vista=dia&fecha=${toYMD(dia)}`}
-                className={`block text-center rounded-md py-1.5 text-sm font-medium ${
-                  esHoy ? "bg-teal-800 text-white" : "bg-white text-slate-700 border border-slate-200"
-                }`}
-              >
-                {nombreDiaCorto(dia)} {dia.getDate()}
-              </Link>
-              <div className="space-y-1.5 min-h-[2rem]">
-                {citasDia.length === 0 ? (
-                  <p className="text-xs text-slate-300 text-center py-2">—</p>
-                ) : (
-                  citasDia.map((cita) => <CitaItem key={cita.id} cita={cita} />)
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <AgendaGridSemana dias={dias} citas={citas} />
     </div>
   );
 }
