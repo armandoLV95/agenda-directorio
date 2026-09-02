@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import type { Contacto } from "@prisma/client";
 import type { FormState } from "@/lib/actions/agenda";
 import ContactoSelect from "@/components/ContactoSelect";
+import FechaInput from "@/components/FechaInput";
 
 export default function CitaForm({
   accion,
@@ -48,14 +49,7 @@ export default function CitaForm({
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">Fecha</label>
-          <input
-            name="fecha"
-            type="date"
-            lang="es-MX"
-            required
-            defaultValue={valoresIniciales?.fecha}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-          />
+          <FechaInput valorInicial={valoresIniciales?.fecha} />
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">Hora inicio</label>
