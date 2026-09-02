@@ -1,7 +1,7 @@
 import Link from "next/link";
 import CitaBloque from "@/components/CitaBloque";
 import { HORA_INICIO_GRID, HORA_FIN_GRID, PX_POR_HORA, ALTURA_GRID } from "@/lib/agendaGrid";
-import { toYMD } from "@/lib/fechas";
+import { toYMD, etiquetaHora12 } from "@/lib/fechas";
 import type { Cita, Contacto } from "@prisma/client";
 
 export default function AgendaGridDia({
@@ -21,8 +21,8 @@ export default function AgendaGridDia({
     <div className="relative rounded-md border border-slate-200 bg-white">
       {horas.map((hora) => (
         <div key={hora} className="flex border-t border-slate-100 first:border-t-0">
-          <div className="w-14 shrink-0 text-right pr-2 pt-0.5">
-            <span className="text-xs text-slate-400">{String(hora).padStart(2, "0")}:00</span>
+          <div className="w-16 shrink-0 text-right pr-2 pt-0.5">
+            <span className="text-xs text-slate-400 whitespace-nowrap">{etiquetaHora12(hora)}</span>
           </div>
           <div className="flex-1 relative" style={{ height: PX_POR_HORA }}>
             <Link
@@ -40,7 +40,7 @@ export default function AgendaGridDia({
       ))}
 
       <div
-        className="absolute top-0 left-14 right-0 pointer-events-none"
+        className="absolute top-0 left-16 right-0 pointer-events-none"
         style={{ height: ALTURA_GRID }}
       >
         {citas.map((cita) => (

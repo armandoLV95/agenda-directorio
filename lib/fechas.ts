@@ -120,6 +120,15 @@ export function sumarMinutosHM(hm: string, minutos: number): string {
   return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
 }
 
+// Etiqueta de una hora en punto (0-23) en formato de 12 horas, para las cabeceras
+// de la cuadricula de la agenda (ej. 17 -> "5:00 p.m.").
+export function etiquetaHora12(hora: number): string {
+  const periodo = hora >= 12 ? "p.m." : "a.m.";
+  let hora12 = hora % 12;
+  if (hora12 === 0) hora12 = 12;
+  return `${hora12}:00 ${periodo}`;
+}
+
 export function toHM(d: Date): string {
   const { hour, minute } = partesEnZona(d);
   return `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}`;

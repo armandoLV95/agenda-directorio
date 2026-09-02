@@ -1,7 +1,7 @@
 import Link from "next/link";
 import CitaBloque from "@/components/CitaBloque";
 import { HORA_INICIO_GRID, HORA_FIN_GRID, PX_POR_HORA, ALTURA_GRID } from "@/lib/agendaGrid";
-import { toYMD, esMismoDia, nombreDiaCorto, diaDelMes } from "@/lib/fechas";
+import { toYMD, esMismoDia, nombreDiaCorto, diaDelMes, etiquetaHora12 } from "@/lib/fechas";
 import type { Cita, Contacto } from "@prisma/client";
 
 type CitaConContacto = Cita & { contacto: Contacto | null };
@@ -18,13 +18,13 @@ export default function AgendaGridSemana({
     (_, i) => HORA_INICIO_GRID + i
   );
   const hoy = new Date();
-  const columnas = `56px repeat(${dias.length}, minmax(110px, 1fr))`;
+  const columnas = `64px repeat(${dias.length}, minmax(110px, 1fr))`;
 
   return (
     <div className="overflow-x-auto">
       <div
         className="grid rounded-md border border-slate-200 bg-white"
-        style={{ gridTemplateColumns: columnas, minWidth: 56 + dias.length * 110 }}
+        style={{ gridTemplateColumns: columnas, minWidth: 64 + dias.length * 110 }}
       >
         <div />
         {dias.map((dia) => {
@@ -49,7 +49,7 @@ export default function AgendaGridSemana({
               style={{ height: PX_POR_HORA }}
               className="border-t border-slate-100 first:border-t-0 text-right pr-2 pt-0.5"
             >
-              <span className="text-[11px] text-slate-400">{String(hora).padStart(2, "0")}:00</span>
+              <span className="text-[10px] text-slate-400 whitespace-nowrap">{etiquetaHora12(hora)}</span>
             </div>
           ))}
         </div>
