@@ -5,6 +5,7 @@ import type { Contacto } from "@prisma/client";
 import type { FormState } from "@/lib/actions/agenda";
 import ContactoSelect from "@/components/ContactoSelect";
 import FechaInput from "@/components/FechaInput";
+import HoraInput from "@/components/HoraInput";
 
 export default function CitaForm({
   accion,
@@ -53,23 +54,11 @@ export default function CitaForm({
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">Hora inicio</label>
-          <input
-            name="horaInicio"
-            type="time"
-            required
-            defaultValue={valoresIniciales?.horaInicio ?? "09:00"}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-          />
+          <HoraInput name="horaInicio" valorInicial={valoresIniciales?.horaInicio ?? "09:00"} />
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">Hora fin</label>
-          <input
-            name="horaFin"
-            type="time"
-            required
-            defaultValue={valoresIniciales?.horaFin ?? "09:30"}
-            className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-          />
+          <HoraInput name="horaFin" valorInicial={valoresIniciales?.horaFin ?? "09:30"} />
         </div>
       </div>
 
