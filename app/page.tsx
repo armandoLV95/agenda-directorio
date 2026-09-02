@@ -62,21 +62,26 @@ export default async function DashboardPage() {
         ) : (
           <ul className="divide-y divide-slate-200 rounded-md border border-slate-200 bg-white">
             {citasHoy.map((cita) => (
-              <li key={cita.id} className="flex items-center gap-3 px-4 py-3">
-                <span className="text-sm font-medium text-slate-700 shrink-0 whitespace-nowrap">
-                  {formatoHora(cita.fechaInicio)}–{formatoHora(cita.fechaFin)}
-                </span>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-slate-900 truncate">{cita.titulo}</p>
-                  {cita.contacto && (
-                    <p className="text-xs text-slate-500 truncate">{cita.contacto.nombre}</p>
-                  )}
-                </div>
-                <span
-                  className={`text-xs rounded-full border px-2 py-0.5 shrink-0 ${ESTADO_CITA_COLOR[cita.estado]}`}
+              <li key={cita.id}>
+                <Link
+                  href={`/agenda/${cita.id}/editar`}
+                  className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50"
                 >
-                  {labelEstadoCita(cita.estado)}
-                </span>
+                  <span className="text-sm font-medium text-slate-700 shrink-0 whitespace-nowrap">
+                    {formatoHora(cita.fechaInicio)}–{formatoHora(cita.fechaFin)}
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-slate-900 truncate">{cita.titulo}</p>
+                    {cita.contacto && (
+                      <p className="text-xs text-slate-500 truncate">{cita.contacto.nombre}</p>
+                    )}
+                  </div>
+                  <span
+                    className={`text-xs rounded-full border px-2 py-0.5 shrink-0 ${ESTADO_CITA_COLOR[cita.estado]}`}
+                  >
+                    {labelEstadoCita(cita.estado)}
+                  </span>
+                </Link>
               </li>
             ))}
           </ul>
