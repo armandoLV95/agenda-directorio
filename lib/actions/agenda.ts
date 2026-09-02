@@ -4,16 +4,9 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/authz";
-import { formatoHora } from "@/lib/fechas";
+import { formatoHora, fechaHoraAInstante } from "@/lib/fechas";
 
 export type FormState = { error: string } | null;
-
-function combinarFechaHora(fecha: string, hora: string): Date {
-  const [h, m] = hora.split(":").map(Number);
-  const dt = new Date(`${fecha}T00:00:00`);
-  dt.setHours(h, m, 0, 0);
-  return dt;
-}
 
 function leerCampos(formData: FormData) {
   const titulo = String(formData.get("titulo") ?? "").trim();
@@ -30,8 +23,8 @@ function validar(campos: ReturnType<typeof leerCampos>): FormState {
   if (!campos.fecha || !campos.horaInicio || !campos.horaFin) {
     return { error: "Fecha y horario son obligatorios" };
   }
-  const inicio = combinarFechaHora(campos.fecha, campos.horaInicio);
-  const fin = combinarFechaHora(campos.fecha, campos.horaFin);
+  const inicio = fechaHoraAInstante(campos.fecha, campos.horaInicio);
+  const fin = fechaHoraAInstante(campos.fecha, campos.horaFin);
   if (fin <= inicio) return { error: "La hora de fin debe ser posterior a la de inicio" };
   return null;
 }
@@ -61,8 +54,8 @@ export async function crearCita(_prevState: FormState, formData: FormData): Prom
   const error = validar(campos);
   if (error) return error;
 
-  const fechaInicio = combinarFechaHora(campos.fecha, campos.horaInicio);
-  const fechaFin = combinarFechaHora(campos.fecha, campos.horaFin);
+  const fechaInicio = fechaHoraAInstante(campos.fecha, campos.horaInicio);
+  const fechaFin = fechaHoraAInstante(campos.fecha, campos.horaFin);
   const conflicto = await buscarConflicto(fechaInicio, fechaFin);
   if (conflicto) return mensajeConflicto(conflicto);
 
@@ -92,8 +85,8 @@ export async function actualizarCita(
   const error = validar(campos);
   if (error) return error;
 
-  const fechaInicio = combinarFechaHora(campos.fecha, campos.horaInicio);
-  const fechaFin = combinarFechaHora(campos.fecha, campos.horaFin);
+  const fechaInicio = fechaHoraAInstante(campos.fecha, campos.horaInicio);
+  const fechaFin = fechaHoraAInstante(campos.fecha, campos.horaFin);
   const conflicto = await buscarConflicto(fechaInicio, fechaFin, citaId);
   if (conflicto) return mensajeConflicto(conflicto);
 

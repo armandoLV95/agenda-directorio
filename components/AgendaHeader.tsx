@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { toYMD, sumarDias, nombreMes } from "@/lib/fechas";
+import { toYMD, sumarDias, nombreMes, anioEnZona } from "@/lib/fechas";
 
 const VISTAS = [
   { valor: "dia", label: "Día" },
@@ -33,7 +33,7 @@ export default function AgendaHeader({
         <h1 className="text-xl font-semibold text-teal-900 whitespace-nowrap">
           {titulo}
         </h1>
-        <span className="text-slate-400 text-sm">· {nombreMes(fecha)} {fecha.getFullYear()}</span>
+        <span className="text-slate-400 text-sm">· {nombreMes(fecha)} {anioEnZona(fecha)}</span>
       </div>
 
       <div className="flex items-center gap-3 flex-wrap">

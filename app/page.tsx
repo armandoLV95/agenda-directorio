@@ -2,15 +2,14 @@ import Link from "next/link";
 import { requireSession } from "@/lib/authz";
 import { prisma } from "@/lib/prisma";
 import { labelEstadoCita, ESTADO_CITA_COLOR } from "@/lib/constants";
-import { toYMD, formatoHora, formatoFechaLarga, conMayusculaInicial } from "@/lib/fechas";
+import { toYMD, fromYMD, sumarDias, formatoHora, formatoFechaLarga, conMayusculaInicial } from "@/lib/fechas";
 
 export default async function DashboardPage() {
   await requireSession();
 
   const hoy = new Date();
-  const inicio = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate());
-  const fin = new Date(inicio);
-  fin.setDate(fin.getDate() + 1);
+  const inicio = fromYMD(toYMD(hoy));
+  const fin = sumarDias(inicio, 1);
 
   const [citasHoy, totalContactos] = await Promise.all([
     prisma.cita.findMany({

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import CitaBloque from "@/components/CitaBloque";
 import { HORA_INICIO_GRID, HORA_FIN_GRID, PX_POR_HORA, ALTURA_GRID } from "@/lib/agendaGrid";
-import { toYMD, esMismoDia, nombreDiaCorto } from "@/lib/fechas";
+import { toYMD, esMismoDia, nombreDiaCorto, diaDelMes } from "@/lib/fechas";
 import type { Cita, Contacto } from "@prisma/client";
 
 type CitaConContacto = Cita & { contacto: Contacto | null };
@@ -37,7 +37,7 @@ export default function AgendaGridSemana({
                 esHoy ? "bg-teal-800 text-white" : "text-slate-600 hover:bg-slate-50"
               }`}
             >
-              {nombreDiaCorto(dia)} {dia.getDate()}
+              {nombreDiaCorto(dia)} {diaDelMes(dia)}
             </Link>
           );
         })}

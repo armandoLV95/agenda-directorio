@@ -14,6 +14,7 @@ import {
   esMismoMes,
   formatoFechaLarga,
   conMayusculaInicial,
+  diaDelMes,
 } from "@/lib/fechas";
 
 type Vista = "dia" | "semana" | "mes";
@@ -35,7 +36,7 @@ export default async function AgendaPage({
 }
 
 async function VistaDia({ fecha }: { fecha: Date }) {
-  const inicio = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate());
+  const inicio = fromYMD(toYMD(fecha));
   const fin = sumarDias(inicio, 1);
   const citas = await prisma.cita.findMany({
     where: { fechaInicio: { gte: inicio, lt: fin } },
@@ -67,7 +68,7 @@ async function VistaSemana({ fecha }: { fecha: Date }) {
       <AgendaHeader
         vista="semana"
         fecha={fecha}
-        titulo={`${dias[0].getDate()} – ${dias[6].getDate()}`}
+        titulo={`${diaDelMes(dias[0])} – ${diaDelMes(dias[6])}`}
       />
       <AgendaGridSemana dias={dias} citas={citas} />
     </div>
@@ -112,7 +113,7 @@ async function VistaMes({ fecha }: { fecha: Date }) {
                   esHoy ? "bg-teal-800 text-white" : ""
                 }`}
               >
-                {dia.getDate()}
+                {diaDelMes(dia)}
               </span>
               <div className="space-y-0.5">
                 {citasDia.slice(0, 3).map((cita) => (
